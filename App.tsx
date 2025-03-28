@@ -1,23 +1,23 @@
-import {View, Text, SafeAreaView, FlatList, ScrollView} from 'react-native';
 import React from 'react';
-import StoryCircle from './src/components/story';
-import {dummyData} from './src/utils/storyData';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
-const App = () => {
+import {SafeAreaView, StatusBar} from 'react-native';
+import {Provider} from 'react-redux';
+import {PersistGate} from 'redux-persist/integration/react';
+import {persistor, store} from './src/redux/store';
+import Story from './src/components/story/Story';
+
+export default function App() {
   return (
-    <SafeAreaView>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        bounces={false}>
-        <View style={{flexDirection: 'row', overflow: 'hidden'}}>
-          {dummyData?.map((user, index) => (
-            <StoryCircle key={index} user={user} />
-          ))}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <GestureHandlerRootView>
+          <SafeAreaView style={{flex: 1}}>
+            <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
+            <Story />
+          </SafeAreaView>
+        </GestureHandlerRootView>
+      </PersistGate>
+    </Provider>
   );
-};
-
-export default App;
+}
